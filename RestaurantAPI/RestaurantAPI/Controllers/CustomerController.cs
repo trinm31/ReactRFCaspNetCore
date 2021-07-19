@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RestaurantAPI.Data;
 using RestaurantAPI.Models;
 
 namespace RestaurantAPI.Controllers

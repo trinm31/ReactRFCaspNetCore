@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace RestaurantAPI.Models
+using RestaurantAPI.Models;
+
+namespace RestaurantAPI.Data
 {
     public class RestaurantDbContext:DbContext
     {
@@ -17,5 +19,14 @@ namespace RestaurantAPI.Models
         public DbSet<FoodItem> FoodItems { get; set; }
         public DbSet<OrderMaster> OrderMasters { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
+        public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.HasIndex(e => e.Username).IsUnique();
+            });
+        }
     }
 }
