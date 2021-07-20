@@ -19,13 +19,13 @@ namespace RestaurantAPI.Data
         public DbSet<FoodItem> FoodItems { get; set; }
         public DbSet<OrderMaster> OrderMasters { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Account> Accounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>(entity =>
+            modelBuilder.Entity<Account>(entity =>
             {
-                entity.HasIndex(e => e.Username).IsUnique();
+                entity.HasIndex(e => e.Email).IsUnique();
             });
         }
     }
