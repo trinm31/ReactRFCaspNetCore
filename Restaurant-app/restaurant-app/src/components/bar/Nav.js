@@ -19,7 +19,7 @@ function Nav() {
         <div>
             <nav className="navbar navbar-expand navbar-dark bg-dark">
                 <div className="navbar-nav">
-                    <Link exact to="/" className="nav-item nav-link">Home</Link>
+                    <Link to="/" className="nav-item nav-link">Home</Link>
                     <Link to="/order" className="nav-item nav-link">Order</Link>
                     <Link to="/profile" className="nav-item nav-link">Profile</Link>
                     {user.role === Role.Admin &&
