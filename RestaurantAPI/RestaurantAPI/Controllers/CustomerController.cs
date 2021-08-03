@@ -7,12 +7,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantAPI.Data;
 using RestaurantAPI.Models;
+using RestaurantAPI.Entities;
+using RestaurantAPI.Helpers;
 
 namespace RestaurantAPI.Controllers
 {
+    [Authorize(Role.Admin)]
     [Route("api/[controller]")]
     [ApiController]
-    public class CustomerController : ControllerBase
+    public class CustomerController : BaseController
     {
         private readonly RestaurantDbContext _context;
 

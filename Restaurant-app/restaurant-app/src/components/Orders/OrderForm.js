@@ -10,7 +10,9 @@ import ReorderIcon from '@material-ui/icons/Reorder';
 import {createAPIEndpoint, ENDPIONTS} from '../../api';
 import { roundTo2DecimalPoint } from '../../utils/';
 import Notification from '../../layouts/Notification';
+import { fetchWrapper } from '../../_helpers';
 
+const BASE_URL = 'http://localhost:5000/api';
 
 const pMethod = [
     {id: 'none', title: 'Select'},
@@ -51,9 +53,10 @@ export default function OrderForm(props) {
     const [notify, setNotify] = useState({isOpen: false});
 
     useEffect(() => {
-        createAPIEndpoint(ENDPIONTS.CUSTOMER).fetchAll()
+       //createAPIEndpoint(ENDPIONTS.CUSTOMER).fetchAll()
+        fetchWrapper.get(`${BASE_URL}/${ENDPIONTS.CUSTOMER}`)
         .then(res => {
-            let customerList = res.data.map(item => ({
+            let customerList = res.map(item => ({
                 id: item.customerID,
                 title: item.customerName
             }));
@@ -77,9 +80,10 @@ export default function OrderForm(props) {
     useEffect(() => {
         if(orderId === 0) resetFormControls()
         else{
-            createAPIEndpoint(ENDPIONTS.ORDER).fetchById(orderId)
+            //createAPIEndpoint(ENDPIONTS.ORDER).fetchById(orderId)
+            fetchWrapper.get(`${BASE_URL}/${ENDPIONTS.ORDER}/${orderId}`)
             .then(res => {
-               setValues(res.data);
+               setValues(res);
                setErrors({});
             })
             .catch(err => console.log(err))
@@ -99,7 +103,8 @@ export default function OrderForm(props) {
         e.preventDefault();
         if(validateForm()){
             if(values.orderMasterId === 0){
-                createAPIEndpoint(ENDPIONTS.ORDER).create(values)
+               // createAPIEndpoint(ENDPIONTS.ORDER).create(values)
+               fetchWrapper.post(`${BASE_URL}/${ENDPIONTS.ORDER}`, values)
                 .then(res => {
                     resetFormControls();
                     setNotify({isOpen: true, message: "Create successfully"});
@@ -107,7 +112,8 @@ export default function OrderForm(props) {
                 .catch(err => console.log(err))
             }
             else{
-                createAPIEndpoint(ENDPIONTS.ORDER).update(values.orderMasterId,values)
+                //createAPIEndpoint(ENDPIONTS.ORDER).update(values.orderMasterId,values)
+                fetchWrapper.put(`${BASE_URL}/${ENDPIONTS.ORDER}/${values.orderMasterId}`, values)
                 .then(res => {
                     setOrderId(0);
                     setNotify({isOpen: true, message: "Update successfully"});

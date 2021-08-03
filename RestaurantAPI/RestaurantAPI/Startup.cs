@@ -64,10 +64,12 @@ namespace RestaurantAPI
             // migrate any database changes on startup (includes initial db creation)
             dataContext.Database.Migrate();
             
-            app.UseCors(options =>
-            options.WithOrigins("http://localhost:3000")
-            .AllowAnyMethod()
-            .AllowAnyHeader());
+            // global cors policy
+            app.UseCors(x => x
+                .SetIsOriginAllowed(origin => true)
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
 
             if (env.IsDevelopment())
             {

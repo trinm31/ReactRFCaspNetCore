@@ -3,16 +3,22 @@ import { createAPIEndpoint , ENDPIONTS} from '../../api/index'
 import Table from '../../layouts/Table';
 import { TableHead, TableRow, TableCell, TableBody } from '@material-ui/core';
 import DeleteOutlineTwoToneIcon from '@material-ui/icons/DeleteOutlineTwoTone';
+import ConfirmDialog from '../../layouts/ConfirmDialog'
+import { fetchWrapper } from '../../_helpers';
+
+const BASE_URL = 'http://localhost:5000/api';
 
 export default function OrderList(props) {
 
     const {setOrderId, setOrderListVisibility, resetFormControls} = props;
     const [orderList, setOrderList]= useState([]);
+    const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, title: '', subTitle: '' })
 
     useEffect(() => {
-        createAPIEndpoint(ENDPIONTS.ORDER).fetchAll()
+        //createAPIEndpoint(ENDPIONTS.ORDER).fetchAll()
+        fetchWrapper.get(`${BASE_URL}/${ENDPIONTS.ORDER}`)
         .then( res => {
-            setOrderList(res.data)
+            setOrderList(res)
         })
         .catch(err => console.log(err))
     },[])
@@ -23,16 +29,21 @@ export default function OrderList(props) {
     }
 
     const deleteOrder = id => {
-        if (window.confirm('Are you sure you want to delete this order')){
-            createAPIEndpoint(ENDPIONTS.ORDER).delete(id)
-            .then( res => {
-               setOrderListVisibility(false);
-               setOrderId(0);
-               resetFormControls();
-               
-            })
-            .catch(err => console.log(err))
-        }
+
+        setConfirmDialog({
+            ...confirmDialog,
+            isOpen: false
+        })
+        //createAPIEndpoint(ENDPIONTS.ORDER).delete(id)
+        fetchWrapper.delete(`${BASE_URL}/${ENDPIONTS.ORDER}/${id}`)
+        .then( res => {
+            setOrderListVisibility(false);
+            setOrderId(0);
+            resetFormControls();
+            
+        })
+        .catch(err => console.log(err))
+        
     }
     return(
         <>
@@ -67,7 +78,14 @@ export default function OrderList(props) {
                                     {item.gTotal}
                                 </TableCell>
                                 <TableCell
-                                onClick= {e => deleteOrder(item.orderMasterId)}>
+                                    onClick= {() => {
+                                        setConfirmDialog({
+                                            isOpen: true,
+                                            title: 'Are you sure to delete this record?',
+                                            subTitle: "You can't undo this operation",
+                                            onConfirm: () => { deleteOrder(item.orderMasterId) }
+                                        })
+                                    }}>
                                     <DeleteOutlineTwoToneIcon
                                         color="secondary"
                                     />
@@ -77,6 +95,10 @@ export default function OrderList(props) {
                     }
                 </TableBody>
             </Table>
+            <ConfirmDialog
+            confirmDialog={confirmDialog}
+            setConfirmDialog={setConfirmDialog}
+            />
         </>
     )
 }

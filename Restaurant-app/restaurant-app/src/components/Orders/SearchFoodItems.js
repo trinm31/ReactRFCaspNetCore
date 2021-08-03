@@ -4,6 +4,9 @@ import { List, ListItem, ListItemText, Paper, InputBase, IconButton, makeStyles,
 import SearchTwoToneIcon from '@material-ui/icons/SearchTwoTone';
 import PlusOneIcon from '@material-ui/icons/PlusOne';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
+import { fetchWrapper } from '../../_helpers';
+
+const BASE_URL = 'http://localhost:5000/api';
 
 const useStyles = makeStyles(theme => ({
     searchPaper: {
@@ -49,10 +52,11 @@ export default function SearchFoodItems(props) {
 
     const classes = useStyles();
     useEffect(() => {
-        createAPIEndpoint(ENDPIONTS.FOODITEM).fetchAll()
+        //createAPIEndpoint(ENDPIONTS.FOODITEM).fetchAll()
+        fetchWrapper.get(`${BASE_URL}/${ENDPIONTS.FOODITEM}`)
             .then(res => {
-                setFoodItems(res.data);
-                setSearchList(res.data);
+                setFoodItems(res);
+                setSearchList(res);
             })
             .catch(err => console.log(err))
 

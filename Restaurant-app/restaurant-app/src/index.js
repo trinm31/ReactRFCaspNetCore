@@ -1,15 +1,19 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import './index.css';
+import { history } from './_helpers';
+import { accountService } from './_services';
 import App from './App';
-import reportWebVitals from './reportWebVitals';
 
-ReactDOM.render(
-    <App />,
-  document.getElementById('root')
-);
+accountService.refreshToken().finally(startApp);
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+function startApp() { 
+  render(
+      <BrowserRouter history={history}>
+          <App />
+      </BrowserRouter>,
+      document.getElementById('root')
+  );
+}
+

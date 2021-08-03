@@ -6,13 +6,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantAPI.Data;
+using RestaurantAPI.Helpers;
 using RestaurantAPI.Models;
 
 namespace RestaurantAPI.Controllers
 {
+    [Authorize(Role.Admin)]
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrderController : BaseController
     {
         private readonly RestaurantDbContext _context;
 
